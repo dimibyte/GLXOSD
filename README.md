@@ -1,11 +1,14 @@
-GLXOSD
+GLXOSD v2
 =============
+
+In this fork this is a C++ program, which is using NV-CONTROL (NVCtrl) instead of NVIDIA Management Library (NVML)
+-------------
 
 [You should probably have a look at GLXOSD's website first!](http://glxosd.nickguletskii.com/)
 -------------
 GLXOSD is an on-screen display (OSD)/overlay for OpenGL applications running on Linux with X11. It can show FPS, the temperature of your CPU, and if you have an NVIDIA graphics card (with proprietary drivers), it will also show the temperature of the GPU. Also, it can log frame timings, which is useful for benchmarking. This project aims to provide some of the functionality that RivaTuner OSD (which is used by MSI Afterburner) provides under Windows.
 
-![Screenshot of glxgears with GLXOSD](https://raw.github.com/nickguletskii/GLXOSD/master/screenshots/glxgears.png "Screenshot of GLXOSD in glxgears")
+![Screenshot of glxgears with GLXOSD](https://raw.githubusercontent.com/dimibyte/GLXOSD/master/screenshots/glxgears.png "Screenshot of GLXOSD in glxgears")
 
 Compiling
 =============
@@ -27,7 +30,7 @@ sudo apt-get install mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev libfontcon
 Then, compile:
 
 ```
-cmake -G "Unix Makefiles"
+cmake -G "Unix Makefiles" ./ -DCMAKE_INSTALL_PREFIX=/usr -DINSTALLATION_SUFFIX_32=/lib32/ -DINSTALLATION_SUFFIX_64=/lib64/
 make all
 ```
 
