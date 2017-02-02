@@ -21,6 +21,7 @@ int numberOfGpus;
 Display *display;
 std::string errorResult;
 boost::format nvidiaGPUFormat;
+boost::format nvidiaGPUutilFormat;
 std::vector<std::string> displayNames;
 void glxosdPluginConstructor(glxosd::GLXOSD *glxosd) {
 	glxosd->getConfigurationManager().addDefaultConfigurationValue(
@@ -28,6 +29,12 @@ void glxosdPluginConstructor(glxosd::GLXOSD *glxosd) {
 
 	nvidiaGPUFormat = glxosd->getConfigurationManager().getProperty < boost::format
 			> ("nvidia_gpu_format");
+
+	glxosd->getConfigurationManager().addDefaultConfigurationValue(
+			"nvidia_gpuutil_format", glxosd::glxosdFormat("%1%\n"));
+
+	nvidiaGPUutilFormat = glxosd->getConfigurationManager().getProperty < boost::format
+			> ("nvidia_gpuutil_format");
 
 	int event, error;
 
@@ -73,6 +80,19 @@ std::string* glxosdPluginDataProvider(glxosd::GLXOSD *glxosdInstance) {
 									glxosdInstance->getConfigurationManager().getProperty<
 											boost::format>(
 											"temperature_format")) % temperature);
+		}
+		char* utilization = {0};
+
+		if ((XNVCTRLQueryTargetStringAttribute(display,
+		NV_CTRL_TARGET_TYPE_GPU, i, 0,
+		NV_CTRL_STRING_GPU_UTILIZATION, &utilization) != True)) {
+			stringBuilder
+					<< (boost::format(nvidiaGPUutilFormat))
+							% "failed to get the utilization percents!";
+		} else {
+			stringBuilder
+					<< (boost::format(nvidiaGPUutilFormat))
+							% utilization;
 		}
 	}
 
